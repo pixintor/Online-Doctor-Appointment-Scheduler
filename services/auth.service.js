@@ -32,16 +32,16 @@ const loginUser = async ({ email, password }) => {
     throw new Error("Invalid email or password");
   }
 
+  // Prevent inactive users from logging in
+  if (!user.isActive) {
+    throw new Error("Account has been deactivated");
+  }
+
   // Compare passwords
   const isPasswordMatch = await bcrypt.compare(password, user.password);
 
   if (!isPasswordMatch) {
     throw new Error("Invalid email or password");
-  }
-
-  // Optional: prevent inactive users from logging in
-  if (!user.isActive) {
-    throw new Error("Account has been deactivated");
   }
 
   return user;

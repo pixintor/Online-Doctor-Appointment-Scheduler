@@ -3,6 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 
 import authRoutes from "./routes/auth.routes.js";
+import doctorRoutes from "./routes/doctor.routes.js";
+import errorHandler from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -19,5 +21,9 @@ app.get("/", (req, res) => {
 
 // API routes
 app.use("/api/auth", authRoutes);
+app.use("/api/doctors", doctorRoutes);
+
+// Error middleware
+app.use(errorHandler);
 
 export default app;

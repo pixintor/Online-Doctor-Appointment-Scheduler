@@ -5,6 +5,8 @@ import morgan from "morgan";
 import authRoutes from "./routes/auth.routes.js";
 import doctorRoutes from "./routes/doctor.routes.js";
 import errorHandler from "./middleware/error.middleware.js";
+import scheduleRoutes from "./routes/schedule.routes.js";
+import appointmentRoutes from "./routes/appointment.routes.js";
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.get("/", (req, res) => {
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
+app.use("/api/schedules", scheduleRoutes);
+app.use("/api/appointments", appointmentRoutes);
 
 // Error middleware
 app.use(errorHandler);

@@ -3,6 +3,7 @@ import {
   getAllDoctors,
   getDoctorById,
   searchDoctors,
+  updateDoctorProfile,
 } from "../services/doctor.service.js";
 import asyncHandler from "../utills/asyncHandler.js";
 
@@ -17,6 +18,7 @@ export const createProfile = asyncHandler(async (req, res) => {
   });
 });
 
+// GET /api/doctors
 export const getDoctors = asyncHandler(async (req, res) => {
   const doctors = await getAllDoctors();
 
@@ -27,6 +29,7 @@ export const getDoctors = asyncHandler(async (req, res) => {
   });
 });
 
+// GET /api/doctors/:id
 export const getDoctor = asyncHandler(async (req, res) => {
   const doctor = await getDoctorById(req.params.id);
 
@@ -36,6 +39,7 @@ export const getDoctor = asyncHandler(async (req, res) => {
   });
 });
 
+// GET /api/doctors/search?specialization=cardio
 export const searchDoctor = asyncHandler(async (req, res) => {
   const doctors = await searchDoctors(req.query.specialization);
 
@@ -46,8 +50,9 @@ export const searchDoctor = asyncHandler(async (req, res) => {
   });
 });
 
+// PUT /api/doctors/profile
 export const updateProfile = asyncHandler(async (req, res) => {
-  const doctor = await updateProfile(req.user.id, req.body);
+  const doctor = await updateDoctorProfile(req.user.id, req.body);
 
   res.status(200).json({
     success: true,

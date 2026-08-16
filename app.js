@@ -30,4 +30,12 @@ app.use("/api/appointments", appointmentRoutes);
 // Error middleware
 app.use(errorHandler);
 
+const receptionistRoutes =
+  require("./routes/receptionist.routes");
+
+app.use(
+  "/api/v1/receptionist",
+  receptionistRoutes
+);
+
 export default app;

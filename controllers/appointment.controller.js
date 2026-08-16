@@ -52,18 +52,45 @@ const updateStatus = asyncHandler(async (req, res) => {
   });
 });
 
-const cancelAppointment = asyncHandler(async (req, res) => {
-  const appointment = await appointmentService.cancelAppointment(
-    req.params.id,
-    req.user.id,
-  );
-
-  res.status(200).json({
-    success: true,
-    message: "Appointment cancelled successfully.",
-    data: appointment,
+const cancelAppointment = async (appointmentId, patientId) => {
+  const appointment = await Appointment.findOne({
+    _id: appointmentId,
+    patient: patientId,
   });
-});
+
+  if (!appointment) {
+    throw new AppError("Appointment not found.", 404);
+  }
+
+  appointment.status = "cancelled";
+
+  await appointment.save();
+
+  const populatedAppointment = await Appointment.findById(
+    appointment._id,
+  )
+    .populate("patient", "firstName lastName email phone")
+    .populate({
+      path: "doctor",
+      populate: {
+        path: "user",
+        select: "firstName lastName email",
+      },
+    });
+
+  try {
+    await emailService.sendAppointmentCancellationEmail(
+      populatedAppointment,
+    );
+  } catch (error) {
+    console.error(
+      "Appointment cancelled, but email notification failed:",
+      error.message,
+    );
+  }
+
+  return populatedAppointment;
+};
 
 export default {
   bookAppointment,
